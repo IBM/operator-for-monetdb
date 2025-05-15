@@ -1,0 +1,11 @@
+apiVersion: monetdb.monetdb.ibm.com/v1
+kind: MonetDb
+metadata:
+  labels:
+    app.kubernetes.io/name: operator-for-monetdb
+    app.kubernetes.io/managed-by: kustomize
+  name: monetdb-sample
+spec:
+  # TODO(user): Add fields here
+  database: 'myopdb'
+  image: 'docker-eu.artifactory.swg-devops.com/hyc-processmining-team-docker-local/giacomo/monetdb:latest'

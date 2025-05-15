@@ -1,0 +1,45 @@
+---
+- name: create role
+  kubernetes.core.k8s:
+    definition:
+      kind: Role
+      apiVersion: rbac.authorization.k8s.io/v1
+      metadata:
+        name: monetdb-executor
+        namespace: '{{ ansible_operator_meta.namespace }}'
+      labels:
+        app.kubernetes.io/instance: '{{ ansible_operator_meta.name }}'
+        app.kubernetes.io/managed-by: '{{ meta.labels.managenby }}'
+        app.kubernetes.io/name: '{{ meta.labels.name }}'
+      rules:
+      - apiGroups: [""] # "" indicates the core API group
+        resources: ["configmaps", "secrets", "persistentvolumeclaims",  "services", "pods"]
+        verbs: ["get", "watch", "list", "create", "delete"]
+      - apiGroups: ["batch"] 
+        resources: [ "jobs"]
+        verbs: ["get", "watch", "list", "create", "delete"] 
+
+
+- name: create role binding
+  kubernetes.core.k8s:
+    definition:
+      kind: RoleBinding
+      apiVersion: rbac.authorization.k8s.io/v1
+      metadata:
+        name: monetdb-executor-rolebinding
+        namespace: '{{ ansible_operator_meta.namespace }}'
+      labels:
+        app.kubernetes.io/instance: '{{ ansible_operator_meta.name }}'
+        app.kubernetes.io/managed-by: '{{ meta.labels.managenby }}'
+        app.kubernetes.io/name: '{{ meta.labels.name }}'
+      subjects:
+      - kind: User
+        name: 'system:serviceaccounts:{{ ansible_operator_meta.namespace }}:monetdb-service-account'
+        apiGroup: rbac.authorization.k8s.io
+      - kind: ServiceAccount
+        name: 'monetdb-service-account'
+        namespace: '{{ ansible_operator_meta.namespace }}'
+      roleRef:
+        kind: Role 
+        name: monetdb-executor 
+        apiGroup: rbac.authorization.k8s.io

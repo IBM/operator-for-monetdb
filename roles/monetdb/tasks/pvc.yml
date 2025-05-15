@@ -1,0 +1,12 @@
+---
+- name: create  Pvc for dbfarm
+  kubernetes.core.k8s:
+    state: present
+    force: False
+    definition: "{{ lookup('template', '../templates/pvcdbfarm.j2', convert_data='no') }}"
+
+- name: create  Pvc for snapshot
+  kubernetes.core.k8s:
+    state: present
+    force: False
+    definition: "{{ lookup('template', '../templates/pvcsnapshot.j2', convert_data='no') }}"

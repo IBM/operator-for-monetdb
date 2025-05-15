@@ -1,0 +1,20 @@
+---
+- name: create configmap for monet
+  kubernetes.core.k8s:
+    definition:
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+            name: '{{ ansible_operator_meta.name }}-monetdb-config'
+            namespace: '{{ ansible_operator_meta.namespace }}'
+            labels:
+              app: '{{ app_name }}'
+              release: '{{ ansible_operator_meta.name }}'
+              generated: "true"
+              app.kubernetes.io/instance: '{{ ansible_operator_meta.name }}'
+              app.kubernetes.io/managed-by: '{{ meta.labels.managenby }}'
+              app.kubernetes.io/name: '{{ meta.labels.name }}'
+        data:
+          MDB_FARM_DIR: '/mnt/monetdbfarm'
+          MDB_SNAPSHOT_DIR: '/mnt/monetsnapshot'
+          MDB_CREATE_DBS: '{{database}}'

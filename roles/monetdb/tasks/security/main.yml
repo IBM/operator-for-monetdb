@@ -1,0 +1,6 @@
+---
+- name: start create service account
+  include_tasks: service-account.yml
+
+- name: start create role
+  include_tasks: role-binding.yml

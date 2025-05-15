@@ -1,0 +1,27 @@
+---
+- name: create service
+  kubernetes.core.k8s:
+      definition:
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: '{{ ansible_operator_meta.name }}-monetdb-service'
+          namespace: '{{ ansible_operator_meta.namespace }}'
+          labels:
+            app: '{{ app_name }}'
+            release: '{{ ansible_operator_meta.name }}'
+            generated: "true"
+            app.kubernetes.io/instance: '{{ ansible_operator_meta.name }}'
+            app.kubernetes.io/managed-by: '{{ meta.labels.managenby }}'
+            app.kubernetes.io/name: '{{ meta.labels.name }}'
+          annotations:
+            service.beta.openshift.io/serving-cert-secret-name: '{{ ansible_operator_meta.name }}-monetdb-service'
+        spec:
+          type: ClusterIP
+          ports:
+            - name: 50000-tcp
+              protocol: TCP
+              port: 50000
+              targetPort: 50000
+          selector:
+            component: 'monetdb'

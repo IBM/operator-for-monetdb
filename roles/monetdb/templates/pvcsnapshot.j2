@@ -1,0 +1,22 @@
+#jinja2: lstrip_blocks: "True", trim_blocks: "True"
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: '{{ ansible_operator_meta.name }}-monetdb-snapshot'
+  namespace: '{{ ansible_operator_meta.namespace }}'
+  labels:
+    app: '{{ app_name }}'
+    release: '{{ ansible_operator_meta.name }}'
+    generated: "true"
+    app.kubernetes.io/instance: '{{ ansible_operator_meta.name }}'
+    app.kubernetes.io/managed-by: '{{ meta.labels.managenby }}'
+    app.kubernetes.io/name: '{{ meta.labels.name }}'
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: '{{ storage.size }}Gi'
+  {% if storage.class is defined and storage.class | length > 0 %}
+  storageClassName: {{storages.class}}
+  {% endif %}

@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  gather_facts: True
+  collections:
+    - kubernetes.core
+    - operator_sdk.util
+  tasks:
+    - block:
+      - import_role:
+          name: "monetdb"

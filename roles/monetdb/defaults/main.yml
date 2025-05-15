@@ -1,0 +1,13 @@
+---
+# defaults file for MonetDb
+database: 'ocpdb'
+storage:
+  size: 1
+  class: ''
+image: 'docker.io/monetdb/monetdb'
+
+app_name: 'monetdb'
+meta:
+  labels:
+    managenby: 'monetdb-operator'
+    name: 'monetdb'
